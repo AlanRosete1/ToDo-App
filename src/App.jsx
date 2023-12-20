@@ -26,7 +26,7 @@ const App = ()=> {
         };
         setTodos([...todos, newTodo])
     }
-
+console.log(todos)
     return (
     <div className="bg-[url('./assets/images/bg-mobile-light.jpg')] bg-no-repeat bg-contain min-h-screen bg-gray-300">
    

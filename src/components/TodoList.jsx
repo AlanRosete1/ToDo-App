@@ -1,5 +1,5 @@
 import TodoItem from "./TodoItem"
-import CrossIcon from "./icons/CrossIcon"
+import CrossIcon from "./icons/IconCross"
 
 const TodoList = ({todos}) => { 
     return (
