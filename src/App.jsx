@@ -10,8 +10,7 @@ const initialStateTodos = [
     {id: 1, title: "Prueba React 1", completed: true},
     {id: 2, title: "Prueba React 2", completed: false},
     {id: 3, title: "Prueba React 3", completed: false},
-    {id: 4, title: "Prueba React 4", completed: false},
-
+    {id: 4, title: "Prueba React 4", completed: false}
 ]
 
 const App = ()=> {
@@ -25,10 +24,43 @@ const App = ()=> {
             completed: false,
         };
         setTodos([...todos, newTodo])
+        console.log({newTodo})
     }
-console.log(todos)
+
+    const removeTodo = (id) => {
+        setTodos(todos.filter((todo) => todo.id !==id ) )
+    }
+
+
+    const updateTodo = (id) => {
+        setTodos(todos.map(todo => todo.id === id ? {...todo, completed: !todo.completed} : todo))
+    }
+
+    const computedItemsLeft = todos.filter((todo) => !todo.completed).length;
+
+    const clearCompleted = () => {
+        setTodos(todos.filter((todo) => !todo.completed))
+    }
+
+    const [filter, setFilter] = useState("all")
+
+    const changeFilter = (filter) => setFilter(filter)
+
+    const filteredTodos = () => {
+        switch (filter) {
+            case "all":
+                return todos
+            case "active":
+                return todos.filter((todo) => !todo.completed)
+            case "complete":
+                return todos.filter((todo) => todo.completed)
+            default:
+                return todos;
+        }
+    }
+
     return (
-    <div className="bg-[url('./assets/images/bg-mobile-light.jpg')] bg-no-repeat bg-contain min-h-screen bg-gray-300">
+    <div className="bg-[url('./assets/images/bg-mobile-light.jpg')] bg-no-repeat bg-contain min-h-screen bg-gray-300 dark:bg-gray-900 dark:bg-[url('./assets/images/bg-mobile-dark.jpg')] transition-all duration-1000">
    
         <Header />
 
@@ -36,11 +68,11 @@ console.log(todos)
 
             <TodoCreate createTodo={createTodo} />
 
-            <TodoList todos={todos}/>
+            <TodoList todos={filteredTodos()} updateTodo={updateTodo} removeTodo={removeTodo}/>
 
-            <TodoComputed />
+            <TodoComputed computedItemsLeft={computedItemsLeft} clearCompleted={clearCompleted}/>
      
-            <TodoFilter />
+            <TodoFilter changeFilter={changeFilter} filter={filter} />
 
         </main>
 
