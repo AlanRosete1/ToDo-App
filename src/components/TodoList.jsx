@@ -1,16 +1,30 @@
-import TodoItem from "./TodoItem"
-import CrossIcon from "./icons/IconCross"
+import { Droppable, Draggable } from "@hello-pangea/dnd";
 
-const TodoList = ({todos, updateTodo, removeTodo}) => { 
+import TodoItem from "./TodoItem";
+
+const TodoList = ({ todos, removeTodo, updateTodo }) => {
     return (
-        <div className="bg-white rounded-md mt-6">
+        <Droppable droppableId="todos">
 
-        {todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} updateTodo={updateTodo} removeTodo={removeTodo}/>
-        ))}
+            {(droppableProvided) => (
+            
+                <div ref={droppableProvided.innerRef}
+                    {...droppableProvided.droppableProps}
+                    className="mt-8 overflow-hidden rounded-t-md bg-white transition-all duration-1000 dark:bg-gray-800 [&>article]:p-4">
+                    {todos.map((todo, index) => (
+                        <Draggable key={todo.id} index={index}draggableId={`${todo.id}`}>
 
-        </div>
-    )
-}
+                            {(draggableProvided) => (
+                                <TodoItem todo={todo} removeTodo={removeTodo} updateTodo={updateTodo} ref={draggableProvided.innerRef} {...draggableProvided.dragHandleProps} {...draggableProvided.draggableProps}
+                                />
+                            )}
+                        </Draggable>
+                    ))}
+                    {droppableProvided.placeholder}
+                </div>
+            )}
+        </Droppable>
+    );
+};
 
-export default TodoList
+export default TodoList;
